@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PanStock - Angela Pinedo</title>
 <style>
-body{font-family:sans-serif;background:#FFF8E8;margin:0;padding:15px}
-.header{background:#0F4C5C;color:white;padding:20px;border-radius:15px;text-align:center}
-.card{background:white;border-radius:15px;padding:15px;margin:15px 0;box-shadow:0 2px 6px #0002;border-left:5px solid #0F4C5C}
-.btn{background:#0F4C5C;color:white;padding:12px;width:100%;border:none;border-radius:10px;font-size:16px}
-.badge{background:#E8F5E9;padding:3px 8px;border-radius:6px;font-size:12px}
+body{font-family:sans-serif;background:#FFF8E1;margin:0;padding:15px}
+.header{background:#0F4C5C;color:white;padding:15px;border-radius:15px;text-align:center}
+.card{background:white;border-radius:15px;padding:15px;margin-top:15px;box-shadow:0 2px 5px #ccc}
+.btn{background:#0F4C5C;color:white;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
+.badge{background:#E8F5E9;padding:3px 8px;border-radius:5px;color:green}
+.stock{font-size:32px;font-weight:bold;color:#0F4C5C}
 </style>
 </head>
 <body>
@@ -17,14 +18,33 @@ body{font-family:sans-serif;background:#FFF8E8;margin:0;padding:15px}
 <h2>PanStock v1.0</h2>
 <p>Autora: Angela Pinedo - Panaderia 1 Sede</p>
 </div>
+
 <div class="card">
-<b>Harina Trigo 25kg</b> <span class="badge">A1</span>
-<p>Stock: 48 sacos</p>
-<button class="btn">SACAR 5kg SIN ESCANER</button>
+<b>Harina Trigo 25kg</b> <span class="badge">Lote: A12</span>
+<p>Stock actual:</p>
+<p class="stock"><span id="stock">48</span> sacos</p>
+<p id="kilos">1200 kg totales</p>
+<button class="btn" onclick="sacar()">SACAR 5kg SIN ESCANER</button>
+<p id="msg" style="color:green;font-weight:bold;margin-top:10px"></p>
 </div>
+
 <div class="card">
-<b>Mantequilla</b> <span class="badge">B2</span>
-<p>Stock: 20 bloques</p>
+<b>Mantequilla</b> <span class="badge">Lote: B05</span>
+<p>Stock: 12 bloques</p>
 </div>
+
+<script>
+let stock = 48;
+function sacar(){
+ if(stock>0){
+  stock = stock - 0.2;
+  document.getElementById('stock').innerText = stock.toFixed(1);
+  document.getElementById('kilos').innerText = (stock*25).toFixed(0) + " kg totales";
+  document.getElementById('msg').innerText = "✅ ¡Se sacaron 5kg! Nuevo stock: " + stock.toFixed(1) + " sacos";
+ } else {
+  document.getElementById('msg').innerText = "❌ Ya no hay stock";
+ }
+}
+</script>
 </body>
 </html>
