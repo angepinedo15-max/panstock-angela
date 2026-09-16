@@ -3,44 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiUGFuU3RvY2sgUHJvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUifQ=='>
+<title>INVENTARIOS - Panaderia 1 Sede</title>
+<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiSU5WRU5UQVJJT1MgLSBQYW5hZGVyaWEgMSBTZWRlIiwic2hvcnRfbmFtZSI6IklOVkVOVEFSSU9TIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwRjRDNUMiLCJ0aGVtZV9jb2xvciI6IiMwRjRDNUMifQ=='>
 <meta name="theme-color" content="#0F4C5C">
-<title>PanStock Pro - Angela Pinedo</title>
 <style>
 *{box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#FFF8E1;margin:0}
 .header{background:#0F4C5C;color:white;padding:20px;text-align:center;position:sticky;top:0}
-.container{padding:15px;max-width:500px;margin:0 auto}
-.card{background:white;border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
-.btn{flex:1;padding:11px;border:none;border-radius:12px;font-weight:bold;cursor:pointer}
+.container{padding:15px;max-width:520px;margin:0 auto}
+.tabs{display:flex;background:white;border-radius:14px;padding:4px;margin:0 0 15px}
+.tab{flex:1;text-align:center;padding:11px;border-radius:10px;font-weight:bold;cursor:pointer}.tab.active{background:#0F4C5C;color:white}
+.card{background:white;border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,0,0,.07)}
+.btn{flex:1;padding:12px;border:none;border-radius:12px;font-weight:bold;cursor:pointer}
 .btn-primary{background:#0F4C5C;color:white}.btn-sec{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80}
-.btn-scan{background:#E3F2FD;color:#0D47A1;border:1px dashed #0D47A1}.btn-add{background:#2E7D32;color:white;width:100%;margin-bottom:15px;padding:14px;font-size:15px}
-.form-add{background:white;border-radius:18px;padding:16px;margin-bottom:15px;display:none;border:2px solid #0F4C5C}
-.form-add input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
+.btn-scan{background:#E3F2FD;color:#0D47A1;border:1px dashed #90CAF9}.btn-add{background:#2E7D32;color:white;width:100%;margin-bottom:15px;padding:14px;font-size:15px}
+.btn-danger{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2}
+.form-add{background:white;border-radius:18px;padding:18px;margin-bottom:15px;display:none;border:2px solid #0F4C5C}
+.form-add input{width:100%;padding:11px;margin:6px 0;border-radius:10px;border:1px solid #ddd}
+.install-tip{background:#E8F5E9;border:1px dashed #2E7D32;border-radius:12px;padding:12px;margin-bottom:15px;font-size:12px;color:#2E7D32;text-align:center}
 </style>
 </head>
 <body>
-<div class="header"><h1>PanStock Pro v2</h1><p>Angela Pinedo - Barranquilla</p></div>
+<div class="header"><h1>INVENTARIOS</h1><p>Panaderia 1 Sede - Control</p></div>
 <div class="container">
-<button class="btn btn-add" onclick="toggleForm()">+ AGREGAR OTRO PRODUCTO</button>
+<div class="install-tip">📲 Para instalar: Menú ⋮ > Instalar app</div>
+<div class="tabs"><div class="tab active" id="tabInv" onclick="showTab('inventario')">📦 INVENTARIO</div><div class="tab" id="tabHis" onclick="showTab('historial')">📋 HISTORIAL</div></div>
+<div id="view-inventario">
+<button class="btn btn-add" onclick="toggleForm()">+ AGREGAR NUEVO PRODUCTO</button>
 <div id="formNuevo" class="form-add">
-<input id="nNombre" placeholder="Nombre: Ej: Levadura 500g">
-<input id="nStock" type="number" placeholder="Cantidad: Ej: 20">
-<input id="nUnidad" placeholder="Unidad: cajas, bultos">
+<input id="nNombre" placeholder="Nombre: Ej: Azucar">
+<input id="nStock" type="number" placeholder="Cantidad: Ej: 30">
+<input id="nUnidad" placeholder="Unidad: bultos, cajas">
 <input id="nPrecio" placeholder="Precio">
 <input id="nLote" placeholder="Lote">
 <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" onclick="agregarProducto()">GUARDAR</button><button class="btn btn-sec" onclick="toggleForm()">CANCELAR</button></div>
 </div>
 <div id="listaProductos"></div>
 </div>
+<div id="view-historial" style="display:none"><div class="card"><div style="display:flex;justify-content:space-between"><b>Historial</b><button class="btn btn-danger" style="flex:none;padding:6px 12px;font-size:11px" onclick="limpiarHistorial()">BORRAR</button></div><div id="listaHistorial"></div></div></div>
+</div>
 <script>
-let productos=JSON.parse(localStorage.getItem('panstock_productos'))||[{id:1,nombre:'Harina Trigo 25kg',stock:48,unidad:'sacos',precio:45000,lote:'A12'},{id:2,nombre:'Mantequilla x 15kg',stock:12,unidad:'bloques',precio:85000,lote:'B04'},{id:3,nombre:'Huevos x30',stock:25,unidad:'cubetas',precio:18000,lote:'C08'}];
-function guardar(){localStorage.setItem('panstock_productos',JSON.stringify(productos));}
-function render(){let c=document.getElementById('listaProductos');c.innerHTML='';productos.forEach(p=>{c.innerHTML+=`<div class="card"><b>${p.nombre}</b> <span style="float:right;background:#E8F5E9;padding:4px 8px;border-radius:10px;font-size:11px">Lote:${p.lote}</span><div style="font-size:32px;font-weight:800;color:#0F4C5C">${p.stock} ${p.unidad}</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-scan" onclick="alert('Escaneando ${p.nombre}')">ESCANEAR</button><button class="btn btn-sec" onclick="mover(${p.id},-1)">SACAR 1</button></div><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="mover(${p.id},1)">+ AGREGAR</button><button class="btn btn-sec" style="background:#FFEBEE;color:#C62828" onclick="eliminar(${p.id})">ELIMINAR</button></div></div>`;});}
-function mover(id,cant){let p=productos.find(x=>x.id===id);if(p.stock+cant<0)return alert('Sin stock');p.stock+=cant;guardar();render();}
-function agregarProducto(){let n=document.getElementById('nNombre').value;let s=parseFloat(document.getElementById('nStock').value);let u=document.getElementById('nUnidad').value||'uds';let pr=document.getElementById('nPrecio').value;let l=document.getElementById('nLote').value;if(!n||isNaN(s))return alert('Falta nombre y cantidad');productos.push({id:Date.now(),nombre:n,stock:s,unidad:u,precio:pr,lote:l});guardar();render();toggleForm();document.getElementById('nNombre').value='';document.getElementById('nStock').value='';}
+let productos=JSON.parse(localStorage.getItem('inventarios_productos'))||[{id:1,nombre:'Harina Trigo 25kg',stock:48,unidad:'sacos',precio:45000,lote:'A12'},{id:2,nombre:'Mantequilla x 15kg',stock:12,unidad:'bloques',precio:85000,lote:'B04'},{id:3,nombre:'Huevos x30',stock:25,unidad:'cubetas',precio:18000,lote:'C08'}];
+let historial=JSON.parse(localStorage.getItem('inventarios_historial'))||[];
+function guardar(){localStorage.setItem('inventarios_productos',JSON.stringify(productos));localStorage.setItem('inventarios_historial',JSON.stringify(historial));}
+function render(){let c=document.getElementById('listaProductos');c.innerHTML='';productos.forEach(p=>{c.innerHTML+=`<div class="card"><b>${p.nombre}</b><div style="font-size:30px;font-weight:800;color:#0F4C5C">${p.stock} ${p.unidad}</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-scan" onclick="escanear('${p.nombre}')">📷 ESCANEAR</button><button class="btn btn-sec" onclick="mover(${p.id},-1)">- SACAR</button></div><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="mover(${p.id},1)">+ AGREGAR</button><button class="btn btn-danger" onclick="eliminar(${p.id})">🗑️</button></div></div>`;});}
+function mover(id,cant){let p=productos.find(x=>x.id===id);if(p.stock+cant<0)return alert('Sin stock');p.stock+=cant;guardar();render();addHist(`${cant<0?'SALIDA':'ENTRADA'}: ${p.nombre} - Stock ${p.stock}`);}
+function agregarProducto(){let n=document.getElementById('nNombre').value;let s=parseFloat(document.getElementById('nStock').value);let u=document.getElementById('nUnidad').value||'uds';let pr=document.getElementById('nPrecio').value;let l=document.getElementById('nLote').value;if(!n||isNaN(s))return alert('Falta nombre');productos.push({id:Date.now(),nombre:n,stock:s,unidad:u,precio:pr,lote:l});guardar();render();toggleForm();}
 function eliminar(id){if(confirm('¿Borrar?')){productos=productos.filter(p=>p.id!==id);guardar();render();}}
 function toggleForm(){let f=document.getElementById('formNuevo');f.style.display=f.style.display==='block'?'none':'block';}
-render();
+function escanear(prod){alert('Escaneando '+prod);addHist('ESCANEO: '+prod);}
+function addHist(t){let h=new Date().toLocaleTimeString().slice(0,5);historial.unshift(`${h} - ${t}`);guardar();renderHist();}
+function renderHist(){let l=document.getElementById('listaHistorial');l.innerHTML=historial.map(x=>`<div style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px">${x}</div>`).join('');}
+function limpiarHistorial(){historial=[];guardar();renderHist();}
+function showTab(t){document.getElementById('view-inventario').style.display=t==='inventario'?'block':'none';document.getElementById('view-historial').style.display=t==='historial'?'block':'none';document.getElementById('tabInv').classList.toggle('active',t==='inventario');document.getElementById('tabHis').classList.toggle('active',t==='historial');if(t==='historial')renderHist();}
+render();renderHist();
 </script>
 </body>
 </html>
