@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiUGFuU3RvY2sgUHJvIC0gQW5nZWxhIFBpbmVkbyIsInNob3J0X25hbWUiOiJQYW5TdG9jayIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRkZGOEUxIiwiZGlzcGxheV9tb2RlIjoic3RhbmRhbG9uZSJ9'>
+<meta name="theme-color" content="#0F4C5C">
 <title>PanStock Pro - Angela Pinedo</title>
 <style>
 *{box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#FFF8E1;margin:0;padding:0}
@@ -20,7 +22,7 @@
 .btn-scan{background:#E3F2FD;color:#0D47A1;border:1px dashed #0D47A1}
 .msg{margin-top:10px;padding:10px;border-radius:10px;font-size:13px;display:none;font-weight:bold}
 .msg.ok{display:block;background:#E8F5E9;color:#2E7D32}.msg.err{display:block;background:#FFEBEE;color:#C62828}
-.tabs{display:flex;background:white;border-radius:14px;padding:4px;margin:15px 0;box-shadow:0 2px 5px rgba(0,0,0,.06)}
+.tabs{display:flex;background:white;border-radius:14px;padding:4px;margin:15px 0}
 .tab{flex:1;text-align:center;padding:10px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer}
 .tab.active{background:#0F4C5C;color:white}
 .history-item{border-bottom:1px solid #eee;padding:8px 0;font-size:13px;display:flex;justify-content:space-between}
@@ -29,127 +31,40 @@
 </head>
 <body>
 <div class="header">
-<h1>🥖 PanStock Pro v1.0</h1>
-<p>Autora: Angela Pinedo - Panaderia 1 Sede - Barranquilla</p>
-<p style="font-size:11px;margin-top:8px">Total productos: <span id="totalProd">3</span> | Valor inventario: $<span id="valorTotal">1.850.000</span></p>
+<h1>PanStock Pro v1.0</h1>
+<p>Autora: Angela Pinedo - Barranquilla</p>
 </div>
-
 <div class="container">
 <div class="tabs">
 <div class="tab active" onclick="showTab('inventario')">Inventario</div>
 <div class="tab" onclick="showTab('historial')">Historial</div>
 </div>
-
 <div id="view-inventario">
 <div class="card">
-<div class="top"><b>🌾 Harina Trigo 25kg</b><span class="badge" id="b1">Lote: A12</span></div>
+<div class="top"><b>Harina Trigo 25kg</b><span class="badge" id="b1">Lote: A12</span></div>
 <div class="stock"><span id="s1">48.0</span> sacos</div>
-<div class="sub"><span id="k1">1200</span> kg totales | $45.000 c/u | Vence: 12/12/2026</div>
+<div class="sub"><span id="k1">1200</span> kg | $45.000 c/u</div>
 <div class="row">
-<button class="btn btn-scan" onclick="escanear('Harina')">📷 ESCANEAR</button>
+<button class="btn btn-scan" onclick="escanear('Harina')">ESCANEAR</button>
 <button class="btn btn-sec" onclick="mover('s1','k1','b1',-0.2)">SACAR 5kg</button>
 </div>
-<div class="row">
-<button class="btn btn-primary" onclick="mover('s1','k1','b1',1)">+ AGREGAR SACO</button>
-</div>
+<div class="row"><button class="btn btn-primary" onclick="mover('s1','k1','b1',1)">+ AGREGAR SACO</button></div>
 <div id="m1" class="msg"></div>
 </div>
-
 <div class="card">
-<div class="top"><b>🧈 Mantequilla x 15kg</b><span class="badge low" id="b2">¡BAJO STOCK!</span></div>
+<div class="top"><b>Mantequilla x 15kg</b><span class="badge low" id="b2">BAJO STOCK!</span></div>
 <div class="stock"><span id="s2">12.0</span> bloques</div>
-<div class="sub"><span id="k2">180</span> kg totales | $85.000 c/u</div>
+<div class="sub"><span id="k2">180</span> kg | $85.000 c/u</div>
 <div class="row">
-<button class="btn btn-scan" onclick="escanear('Mantequilla')">📷 ESCANEAR</button>
+<button class="btn btn-scan" onclick="escanear('Mantequilla')">ESCANEAR</button>
 <button class="btn btn-sec" onclick="mover('s2','k2','b2',-1)">SACAR 1</button>
 </div>
-<div class="row">
-<button class="btn btn-primary" onclick="mover('s2','k2','b2',1)">+ AGREGAR</button>
-</div>
+<div class="row"><button class="btn btn-primary" onclick="mover('s2','k2','b2',1)">+ AGREGAR</button></div>
 <div id="m2" class="msg"></div>
 </div>
-
-<div class="card">
-<div class="top"><b>🥚 Huevos Cubeta x30</b><span class="badge" id="b3">Lote: C08</span></div>
-<div class="stock"><span id="s3">25</span> cubetas</div>
-<div class="sub"><span id="k3">750</span> unidades | $18.000 c/u</div>
-<div class="row">
-<button class="btn btn-scan" onclick="escanear('Huevos')">📷 ESCANEAR</button>
-<button class="btn btn-sec" onclick="mover('s3','k3','b3',-1)">SACAR 1</button>
 </div>
-<div class="row">
-<button class="btn btn-primary" onclick="mover('s3','k3','b3',1)">+ AGREGAR</button>
+<div id="view-historial" style="display:none"><div class="card" id="listaHistorial"><b>Movimientos de hoy</b></div></div>
 </div>
-<div id="m3" class="msg"></div>
-</div>
-</div>
-
-<div id="view-historial" style="display:none">
-<div class="card" id="listaHistorial">
-<b>📋 Movimientos de hoy</b>
-<div class="history-item"><span>08:15 - Se sacó 5kg Harina - Angela P.</span><span style="color:green">OK</span></div>
-<div class="history-item"><span>09:30 - Ingreso 2 sacos Harina</span><span style="color:blue">+2</span></div>
-</div>
-</div>
-
-<div class="footer">
-PanStock Pro desarrollado para proyecto SENA<br>
-Angela Pinedo © 2026 - Barranquilla, Atlántico
-</div>
-</div>
-
 <script>
-let historial = [];
 function mover(idStock,idKilos,idBadge,cant){
- let el = document.getElementById(idStock);
- let val = parseFloat(el.innerText);
- let nuevo = val + cant;
- if(nuevo<0){showMsg(idStock,"❌ No hay suficiente stock","err"); return;}
- el.innerText = nuevo.toFixed(1);
- if(idKilos){
-  let factor = idStock==='s1'?25:idStock==='s2'?15:30;
-  document.getElementById(idKilos).innerText = (nuevo*factor).toFixed(0);
- }
- let badge = document.getElementById(idBadge);
- if(nuevo<15){badge.innerText="¡BAJO STOCK!"; badge.className="badge low";} else {badge.innerText="Stock OK"; badge.className="badge";}
- let msg = cant<0?`Se sacaron ${Math.abs(cant)} unidades`:`Se agregaron ${cant} unidades`;
- showMsg(idStock,"✅ "+msg,"ok");
- addHist(msg);
- updateTotal();
- localStorage.setItem(idStock,nuevo);
-}
-function showMsg(idStock,text,type){
- let id = 'm'+idStock.charAt(1);
- let m = document.getElementById(id);
- m.innerText=text; m.className='msg '+type;
- setTimeout(()=>{m.className='msg';},3000);
-}
-function addHist(text){
- let now = new Date().toLocaleTimeString().slice(0,5);
- historial.unshift(`${now} - ${text} - Angela`);
- let list = document.getElementById('listaHistorial');
- list.innerHTML = '<b>📋 Movimientos de hoy</b>' + historial.map(h=>`<div class="history-item"><span>${h}</span><span style="color:green">OK</span></div>`).join('');
-}
-function escanear(prod){
- alert('📷 Simulando escaner para: '+prod+'\nEn la version final aqui se abre la camara y lee el codigo de barras del lote.\n¡Funcionalidad lista para presentar!');
- addHist('Escaneo simulado de '+prod);
-}
-function showTab(t){
- document.getElementById('view-inventario').style.display = t==='inventario'?'block':'none';
- document.getElementById('view-historial').style.display = t==='historial'?'block':'none';
- document.querySelectorAll('.tab').forEach((e,i)=>{e.classList.toggle('active',(t==='inventario'&&i===0)||(t==='historial'&&i===1))});
-}
-function updateTotal(){
- let total = parseFloat(document.getElementById('s1').innerText)*45000 + parseFloat(document.getElementById('s2').innerText)*85000 + parseFloat(document.getElementById('s3').innerText)*18000;
- document.getElementById('valorTotal').innerText = total.toLocaleString('es-CO');
-}
-window.onload = ()=>{
- ['s1','s2','s3'].forEach(id=>{
-  let v = localStorage.getItem(id);
-  if(v) document.getElementById(id).innerText=parseFloat(v).toFixed(1);
- });
- updateTotal();
-}
-</script>
-</body>
-</html>
+let el=document.getElementById(idStock
