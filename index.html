@@ -4,36 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INVENTARIOS</title>
-<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiSU5WRU5UQVJJT1MiLCJzaG9ydF9uYW1lIjoiSU5WRU5UQVJJT1MiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRkZGOFgxIiwidGhlbWVfY29sb3IiOiIjMEY0QzVDIiwiaWNvbnMiOlt7InNyYyI6Imh0dHBzOi8vY2RuLWljb25zLXBuZy5mbGF0aWNvbi5jb20vNTEyLzI3MDIvMjcwMjA2OS5wbmcifV19'>
+<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiSU5WRU5UQVJJT1MiLCJzaG9ydF9uYW1lIjoiSU5WRU5UQVJJT1MiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBGNDQ1QyIsInRoZW1lX2NvbG9yIjoiIzBGNDQ1QyJ9'>
 <meta name="theme-color" content="#0F4C5C">
 <style>
 *{box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#FFF8E1;margin:0}
-.header{background:#0F4C5C;color:white;padding:20px;text-align:center;position:sticky;top:0;z-index:10}
+.login-screen{position:fixed;inset:0;background:#0F4C5C;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{background:white;border-radius:22px;padding:28px;width:100%;max-width:340px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.login-box h2{color:#0F4C5C;margin:0 0 6px}.login-box input{width:100%;padding:12px;margin:8px 0;border-radius:12px;border:1px solid #ddd}
+.btn-login{background:#0F4C5C;color:white;width:100%;padding:13px;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px}
+.header{background:#0F4C5C;color:white;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 .container{padding:14px;max-width:540px;margin:0 auto}
 .tabs{display:flex;background:white;border-radius:14px;padding:4px;gap:4px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.tab{flex:1;text-align:center;padding:12px 4px;border-radius:10px;font-weight:bold;font-size:11px;cursor:pointer;color:#666}
+.tab{flex:1;text-align:center;padding:11px 3px;border-radius:10px;font-weight:bold;font-size:10.5px;cursor:pointer;color:#666}
 .tab.active{background:#0F4C5C;color:white}
 .card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.06)}
-.top{display:flex;justify-content:space-between;align-items:center}
 .badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:bold}
 .badge-mp{background:#FFF3E0;color:#E65100}.badge-pt{background:#E8F5E9;color:#2E7D32}.badge-low{background:#FFEBEE;color:#C62828}
 .stock{font-size:26px;font-weight:800;color:#0F4C5C}
 .btn{flex:1;padding:10px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:11px}
-.btn-add{width:100%;background:#2E7D32;color:white;padding:13px;margin-bottom:12px;font-size:14px;border-radius:12px;border:none;font-weight:bold;cursor:pointer}
+.btn-add{width:100%;background:#2E7D32;color:white;padding:13px;margin-bottom:12px;font-size:13px;border-radius:12px;border:none;font-weight:bold;cursor:pointer}
 .btn-p{background:#0F4C5C;color:white}.btn-s{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80}
-.btn-edit{background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9}
-.btn-del{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2}
+.btn-edit{background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9}.btn-del{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2}
 .form-add{background:white;border:2px solid #0F4C5C;border-radius:18px;padding:14px;display:none;margin-bottom:12px}
 .form-add input{width:100%;padding:10px;margin:5px 0;border-radius:10px;border:1px solid #ddd}
-.exist-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.exist-box{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f9f9f9;border-radius:10px;margin-bottom:6px}
+.log{padding:7px 0;border-bottom:1px solid #eee;font-size:12px}
 </style>
 </head>
 <body>
-<div class="header"><h1>INVENTARIOS</h1><p>Panaderia 1 Sede - Control Total</p></div>
+
+<div id="loginScreen" class="login-screen">
+<div class="login-box">
+<h1 style="font-size:32px;margin:0">📦</h1>
+<h2>INVENTARIOS</h2>
+<p style="color:#666;font-size:12px;margin:0 0 16px">Panadería 1 Sede</p>
+<div id="loginForm">
+<input id="user" placeholder="Usuario">
+<input id="pass" type="password" placeholder="Contraseña">
+<button class="btn-login" onclick="login()">ENTRAR</button>
+<p style="font-size:11px;color:#888;margin-top:12px">Primer uso: Crea tu usuario.<br>Ej: usuario: angela / pass: 1234</p>
+</div>
+<div id="msgLogin" style="color:#C62828;font-size:12px;margin-top:10px;display:none"></div>
+</div>
+</div>
+
+<div class="header"><div><b>INVENTARIOS</b><br><small style="opacity:.7;font-size:11px" id="userLabel"></small></div><div style="font-size:11px;cursor:pointer" onclick="logout()">Salir ↪</div></div>
+
 <div class="container">
 <div class="tabs">
-<div class="tab active" id="t-mp" onclick="showTab('mp')">🌾 MATERIA PRIMA</div>
-<div class="tab" id="t-pt" onclick="showTab('pt')">🍞 PRODUCCIÓN</div>
+<div class="tab active" id="t-mp" onclick="showTab('mp')">🌾 MATERIAS PRIMAS</div>
+<div class="tab" id="t-pt" onclick="showTab('pt')">🍞 PROD. TERMINADO</div>
 <div class="tab" id="t-ex" onclick="showTab('ex')">📦 EXISTENCIAS</div>
 </div>
 
@@ -44,61 +64,103 @@
 <input id="mpNombre" placeholder="Ej: Harina Trigo 25kg">
 <input id="mpStock" type="number" placeholder="Cantidad">
 <input id="mpUnidad" placeholder="Unidad: sacos, bloques">
-<input id="mpPrecio" placeholder="Precio">
 <input type="hidden" id="mpEditId">
 <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-p" onclick="guardarForm('mp')">GUARDAR</button><button class="btn btn-s" onclick="cancelarForm('mp')">CANCELAR</button></div>
 </div>
 <div id="listaMP"></div>
+<div class="card"><b>📥📤 Entradas y Salidas - Materias Primas</b><div id="histMP" style="margin-top:8px"></div></div>
 </div>
 
 <div id="view-pt" style="display:none">
-<button class="btn-add" style="background:#0F4C5C" onclick="toggleForm('pt')">+ REGISTRAR PRODUCCIÓN</button>
+<button class="btn-add" style="background:#0F4C5C" onclick="toggleForm('pt')">+ AGREGAR PRODUCTO TERMINADO</button>
 <div id="form-pt" class="form-add" style="border-color:#2E7D32">
-<h4 id="title-pt" style="margin:0 0 8px;color:#2E7D32">Nueva Producción</h4>
-<input id="ptNombre" placeholder="Ej: Torta Tres Leches, Pan Francés">
-<input id="ptStock" type="number" placeholder="Cantidad hecha hoy">
-<input id="ptUnidad" placeholder="Unidad: panes, porciones, tortas">
+<h4 id="title-pt" style="margin:0 0 8px;color:#2E7D32">Nuevo Producto Terminado</h4>
+<input id="ptNombre" placeholder="Ej: Pan Francés, Torta Tres Leches">
+<input id="ptStock" type="number" placeholder="Cantidad">
+<input id="ptUnidad" placeholder="Unidad: panes, porciones">
 <input type="hidden" id="ptEditId">
 <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-p" onclick="guardarForm('pt')">GUARDAR</button><button class="btn btn-s" onclick="cancelarForm('pt')">CANCELAR</button></div>
 </div>
 <div id="listaPT"></div>
+<div class="card"><b>📥📤 Entradas y Salidas - Producto Terminado</b><div id="histPT" style="margin-top:8px"></div></div>
 </div>
 
 <div id="view-ex" style="display:none">
-<div class="card"><b>📦 Existencias Actuales</b><div id="tablaExistencias" style="margin-top:10px"></div></div>
-<div class="card"><b>📥📤 Entradas y Salidas</b><div id="historial" style="font-size:12px;color:#666;margin-top:8px"></div><button class="btn btn-del" style="margin-top:10px;width:100%" onclick="limpiarHist()">BORRAR HISTORIAL</button></div>
+<div class="card"><b>🌾 Existencias - Materias Primas</b><div id="exMP" style="margin-top:10px"></div></div>
+<div class="card"><b>🍞 Existencias - Producto Terminado</b><div id="exPT" style="margin-top:10px"></div></div>
+<div class="card"><b>📊 Resumen Total</b><div id="resumen" style="margin-top:10px"></div></div>
 </div>
+
 </div>
 
 <script>
-let mp = JSON.parse(localStorage.getItem('inv_mp')) || [{id:1,nombre:'Harina Trigo 25kg',stock:48,unidad:'sacos',precio:45000},{id:2,nombre:'Mantequilla x 15kg',stock:12,unidad:'bloques',precio:85000}];
-let pt = JSON.parse(localStorage.getItem('inv_pt')) || [{id:101,nombre:'Pan Francés',stock:80,unidad:'panes'},{id:102,nombre:'Torta Tres Leches',stock:5,unidad:'porciones'}];
-let hist = JSON.parse(localStorage.getItem('inv_hist')) || [];
+// LOGIN
+let savedUser = JSON.parse(localStorage.getItem('inv_user'));
+function checkLogin(){
+if(localStorage.getItem('inv_logged')==='true' && savedUser){
+document.getElementById('loginScreen').style.display='none';
+document.getElementById('userLabel').innerText='Hola, '+savedUser.user;
+}
+}
+checkLogin();
+function login(){
+let u=document.getElementById('user').value.trim();
+let p=document.getElementById('pass').value.trim();
+let msg=document.getElementById('msgLogin');
+if(!u||!p){msg.style.display='block';msg.innerText='Escribe usuario y contraseña';return;}
+if(!savedUser){
+savedUser={user:u,pass:p};
+localStorage.setItem('inv_user',JSON.stringify(savedUser));
+localStorage.setItem('inv_logged','true');
+location.reload();
+return;
+}
+if(u===savedUser.user && p===savedUser.pass){
+localStorage.setItem('inv_logged','true');
+document.getElementById('loginScreen').style.display='none';
+document.getElementById('userLabel').innerText='Hola, '+u;
+}else{
+msg.style.display='block';msg.innerText='Usuario o contraseña incorrectos';
+}
+}
+function logout(){localStorage.removeItem('inv_logged');location.reload();}
 
-function guardar(){localStorage.setItem('inv_mp',JSON.stringify(mp));localStorage.setItem('inv_pt',JSON.stringify(pt));localStorage.setItem('inv_hist',JSON.stringify(hist));}
+// INVENTARIOS
+let mp = JSON.parse(localStorage.getItem('inv_mp')) || [{id:1,nombre:'Harina Trigo 25kg',stock:48,unidad:'sacos'},{id:2,nombre:'Mantequilla x 15kg',stock:12,unidad:'bloques'}];
+let pt = JSON.parse(localStorage.getItem('inv_pt')) || [{id:101,nombre:'Pan Francés',stock:80,unidad:'panes'},{id:102,nombre:'Torta Tres Leches',stock:5,unidad:'porciones'}];
+let histMP = JSON.parse(localStorage.getItem('inv_histMP')) || [];
+let histPT = JSON.parse(localStorage.getItem('inv_histPT')) || [];
+
+function guardar(){localStorage.setItem('inv_mp',JSON.stringify(mp));localStorage.setItem('inv_pt',JSON.stringify(pt));localStorage.setItem('inv_histMP',JSON.stringify(histMP));localStorage.setItem('inv_histPT',JSON.stringify(histPT));}
 
 function render(){
 let cMP=document.getElementById('listaMP');cMP.innerHTML='';
 mp.forEach(p=>{
 let bajo=p.stock<15;
-cMP.innerHTML+=`<div class="card"><div class="top"><b>${p.nombre}</b><span class="badge ${bajo?'badge-low':'badge-mp'}">${bajo?'BAJO STOCK':'M.PRIMA'}</span></div><div class="stock">${p.stock} <small style="font-size:13px">${p.unidad}</small></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-s" onclick="mover('mp',${p.id},-1)">-1 SACAR</button><button class="btn btn-p" onclick="mover('mp',${p.id},1)">+1</button></div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-edit" onclick="editar('mp',${p.id})">✏️ EDITAR</button><button class="btn btn-del" onclick="eliminar('mp',${p.id})">🗑️ BORRAR</button></div></div>`;
+cMP.innerHTML+=`<div class="card"><div style="display:flex;justify-content:space-between"><b>${p.nombre}</b><span class="badge ${bajo?'badge-low':'badge-mp'}">${bajo?'BAJO':'M.PRIMA'}</span></div><div class="stock">${p.stock} <small style="font-size:12px">${p.unidad}</small></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-s" onclick="mover('mp',${p.id},-1)">SACAR -1</button><button class="btn btn-p" onclick="mover('mp',${p.id},1)">+ AGREGAR +1</button></div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-edit" onclick="editar('mp',${p.id})">✏️ EDITAR</button><button class="btn btn-del" onclick="eliminar('mp',${p.id})">🗑️</button></div></div>`;
 });
 let cPT=document.getElementById('listaPT');cPT.innerHTML='';
 pt.forEach(p=>{
 let bajo=p.stock<5;
-cPT.innerHTML+=`<div class="card"><div class="top"><b>${p.nombre}</b><span class="badge ${bajo?'badge-low':'badge-pt'}">${bajo?'POR AGOTARSE':'PRODUCIDO'}</span></div><div class="stock">${p.stock} <small style="font-size:13px">${p.unidad}</small></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-s" onclick="mover('pt',${p.id},-1)">VENDIDO -1</button><button class="btn btn-p" onclick="mover('pt',${p.id},1)">+1 HACER</button></div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-edit" onclick="editar('pt',${p.id})">✏️ EDITAR</button><button class="btn btn-del" onclick="eliminar('pt',${p.id})">🗑️ BORRAR</button></div></div>`;
+cPT.innerHTML+=`<div class="card"><div style="display:flex;justify-content:space-between"><b>${p.nombre}</b><span class="badge ${bajo?'badge-low':'badge-pt'}">${bajo?'POR AGOTAR':'TERMINADO'}</span></div><div class="stock">${p.stock} <small style="font-size:12px">${p.unidad}</small></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-s" onclick="mover('pt',${p.id},-1)">VENDIDO -1</button><button class="btn btn-p" onclick="mover('pt',${p.id},1)">+ HACER +1</button></div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-edit" onclick="editar('pt',${p.id})">✏️ EDITAR</button><button class="btn btn-del" onclick="eliminar('pt',${p.id})">🗑️</button></div></div>`;
 });
-let ex=document.getElementById('tablaExistencias');
-let todos=[...mp.map(x=>({...x,tipo:'Materia'})),...pt.map(x=>({...x,tipo:'Producción'}))];
-ex.innerHTML=todos.map(p=>`<div class="exist-row"><span><b>${p.nombre}</b><br><small style="color:#999">${p.tipo}</small></span><b style="color:${p.stock<10?'#C62828':'#0F4C5C'}">${p.stock} ${p.unidad}</b></div>`).join('')||'Vacío';
-document.getElementById('historial').innerHTML=hist.slice(0,30).map(h=>`<div style="padding:6px 0;border-bottom:1px solid #eee">${h}</div>`).join('')||'Sin movimientos aún';
+
+document.getElementById('exMP').innerHTML=mp.map(p=>`<div class="exist-box"><span>${p.nombre}</span><b style="color:${p.stock<15?'#C62828':'#0F4C5C'}">${p.stock} ${p.unidad}</b></div>`).join('')||'Vacío';
+document.getElementById('exPT').innerHTML=pt.map(p=>`<div class="exist-box"><span>${p.nombre}</span><b style="color:${p.stock<5?'#C62828':'#2E7D32'}">${p.stock} ${p.unidad}</b></div>`).join('')||'Vacío';
+document.getElementById('resumen').innerHTML=`<div class="exist-box"><span>Total Materia Prima</span><b>${mp.reduce((a,b)=>a+b.stock,0)} items</b></div><div class="exist-box"><span>Total Producto Terminado</span><b>${pt.reduce((a,b)=>a+b.stock,0)} items</b></div>`;
+
+document.getElementById('histMP').innerHTML=histMP.slice(0,15).map(h=>`<div class="log">${h}</div>`).join('')||'<small style="color:#999">Sin movimientos</small>';
+document.getElementById('histPT').innerHTML=histPT.slice(0,15).map(h=>`<div class="log">${h}</div>`).join('')||'<small style="color:#999">Sin movimientos</small>';
 }
 
 function mover(tipo,id,cant){
 let arr=tipo==='mp'?mp:pt;let p=arr.find(x=>x.id===id);
 if(p.stock+cant<0)return alert('No puede quedar negativo');
-p.stock+=cant;guardar();render();
-addHist(`${cant<0?'📤 SALIDA':'📥 ENTRADA'} [${tipo==='mp'?'M.PRIMA':'PROD'}] ${p.nombre} (${cant>0?'+'+cant:cant}) -> Quedan ${p.stock}`);
+p.stock+=cant;
+let hora=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+let texto=`${hora} - ${cant<0?'📤 SALIDA':'📥 ENTRADA'} ${p.nombre} (${cant>0?'+'+cant:cant}) -> Quedan ${p.stock} ${p.unidad}`;
+if(tipo==='mp'){histMP.unshift(texto);if(histMP.length>30)histMP.pop();}else{histPT.unshift(texto);if(histPT.length>30)histPT.pop();}
+guardar();render();
 }
 
 function editar(tipo,id){
@@ -106,7 +168,6 @@ let arr=tipo==='mp'?mp:pt;let p=arr.find(x=>x.id===id);
 document.getElementById(tipo+'Nombre').value=p.nombre;
 document.getElementById(tipo+'Stock').value=p.stock;
 document.getElementById(tipo+'Unidad').value=p.unidad;
-if(tipo==='mp')document.getElementById('mpPrecio').value=p.precio||'';
 document.getElementById(tipo+'EditId').value=id;
 document.getElementById('title-'+tipo).innerText='✏️ Editando: '+p.nombre;
 document.getElementById('form-'+tipo).style.display='block';
@@ -120,36 +181,16 @@ let uni=document.getElementById(tipo+'Unidad').value.trim()||'uds';
 let editId=document.getElementById(tipo+'EditId').value;
 if(!nom||isNaN(stk))return alert('Falta nombre y cantidad');
 let arr=tipo==='mp'?mp:pt;
-if(editId){
-let p=arr.find(x=>x.id==editId);
-p.nombre=nom;p.stock=stk;p.unidad=uni;
-if(tipo==='mp')p.precio=document.getElementById('mpPrecio').value;
-addHist(`✏️ EDITADO [${tipo}] ${nom} -> ${stk} ${uni}`);
-}else{
-let precio=tipo==='mp'?document.getElementById('mpPrecio').value:0;
-arr.push({id:Date.now(),nombre:nom,stock:stk,unidad:uni,precio:precio});
-addHist(`🆕 NUEVO [${tipo}] ${nom} - ${stk} ${uni}`);
-}
-document.getElementById(tipo+'EditId').value='';
-document.getElementById(tipo+'Nombre').value='';document.getElementById(tipo+'Stock').value='';document.getElementById(tipo+'Unidad').value='';
-document.getElementById('form-'+tipo).style.display='none';
+if(editId){let p=arr.find(x=>x.id==editId);p.nombre=nom;p.stock=stk;p.unidad=uni;}
+else{arr.push({id:Date.now(),nombre:nom,stock:stk,unidad:uni});}
+document.getElementById(tipo+'EditId').value='';document.getElementById('form-'+tipo).style.display='none';
+document.getElementById(tipo+'Nombre').value='';document.getElementById(tipo+'Stock').value='';
 guardar();render();
 }
 
-function cancelarForm(tipo){
-document.getElementById(tipo+'EditId').value='';
-document.getElementById('form-'+tipo).style.display='none';
-}
-
-function eliminar(tipo,id){
-if(!confirm('¿Seguro borrar?'))return;
-if(tipo==='mp')mp=mp.filter(x=>x.id!==id); else pt=pt.filter(x=>x.id!==id);
-guardar();render();addHist(`🗑️ BORRADO [${tipo}] ID ${id}`);
-}
-
-function addHist(t){let h=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})+' - '+t;hist.unshift(h);if(hist.length>50)hist.pop();guardar();render();}
-function limpiarHist(){if(confirm('¿Borrar historial?')){hist=[];guardar();render();}}
-function toggleForm(tipo){let f=document.getElementById('form-'+tipo);if(f.style.display==='block'){cancelarForm(tipo);}else{f.style.display='block';document.getElementById('title-'+tipo).innerText=tipo==='mp'?'Nueva Materia Prima':'Nueva Producción';}}
+function cancelarForm(tipo){document.getElementById(tipo+'EditId').value='';document.getElementById('form-'+tipo).style.display='none';}
+function eliminar(tipo,id){if(!confirm('¿Borrar?'))return;if(tipo==='mp')mp=mp.filter(x=>x.id!==id);else pt=pt.filter(x=>x.id!==id);guardar();render();}
+function toggleForm(tipo){let f=document.getElementById('form-'+tipo);f.style.display=f.style.display==='block'?'none':'block';}
 function showTab(t){document.getElementById('view-mp').style.display=t==='mp'?'block':'none';document.getElementById('view-pt').style.display=t==='pt'?'block':'none';document.getElementById('view-ex').style.display=t==='ex'?'block':'none';document.getElementById('t-mp').classList.toggle('active',t==='mp');document.getElementById('t-pt').classList.toggle('active',t==='pt');document.getElementById('t-ex').classList.toggle('active',t==='ex');}
 render();
 </script>
